@@ -1,0 +1,99 @@
+# Parameters for every Collider node, keyed by node name.
+# Values here override the defaults in the code; launch arguments override these.
+tracker:
+  ros__parameters:
+    image_topic: /iris/static_camera_sensor/image
+    observation_topic: /collider/target
+    debug_image_topic: /collider/tracker/image
+    focal_px: 205.47
+
+target_motion:
+  ros__parameters:
+    observation_topic: /collider/target
+    pose_topic: /ap/v1/pose/filtered
+    track_topic: /collider/target_track
+    alpha: 0.5
+    beta: 0.1
+    max_coast_sec: 0.5
+    max_pose_gap_sec: 0.1
+
+steering:
+  ros__parameters:
+    backend: cmd_vel          # cmd_vel (GUIDED) or rc (LOITER); the launch argument overrides it
+    track_topic: /collider/target_track
+    pose_topic: /ap/v1/pose/filtered
+    status_topic: /ap/v1/status
+    cmd_vel_topic: /ap/v1/cmd_vel
+    mavlink_url: udp:localhost:14550
+    rate_hz: 10.0
+    telemetry_timeout_sec: 3.0   # status arrives only every ~0.75 s
+    track_timeout_sec: 0.5
+    yaw_gain: 1.0
+    yaw_rate_feedforward: 1.0
+    max_yaw_rate_dps: 45.0
+    climb_gain: 0.1
+    max_climb_mps: 1.0
+    deadband_deg: 1.0
+    max_prediction_sec: 0.3
+
+starter:
+  ros__parameters:
+    mode_service: /ap/v1/mode_switch
+    prearm_service: /ap/v1/prearm_check
+    arm_service: /ap/v1/arm_motors
+    takeoff_service: /ap/v1/experimental/takeoff
+    status_topic: /ap/v1/status
+    pose_topic: /ap/v1/pose/filtered
+    safety_state_topic: /safety/state   # takeoff is refused while this is not OK
+    timeout_sec: 10.0
+    retry_interval_sec: 1.0
+
+safety:
+  ros__parameters:
+    telemetry_timeout_sec: 3.0   # status arrives only every ~0.75 s
+    clock_stall_warning_sec: 3.0  # warn when simulation time stops while armed
+    violation_action: brake     # after BRAKE: stay (brake), land, or rtl
+    brake_hold_sec: 2.0         # time in BRAKE before switching to land or rtl
+    retry_interval_sec: 1.0
+    status_topic: /ap/v1/status
+    pose_topic: /ap/v1/pose/filtered
+    mode_service: /ap/v1/mode_switch
+    steering_enable_service: /steering/enable
+    takeoff_action: /starter/takeoff
+
+mission:
+  ros__parameters:
+    # steering_mode is set by the launch file from the backend argument.
+    require_safety: true        # refuse to start without a safety supervisor
+    service_timeout_sec: 5.0
+    takeoff_timeout_sec: 60.0
+    landing_timeout_sec: 120.0
+    telemetry_timeout_sec: 2.0
+    takeoff_action: /starter/takeoff
+    steering_enable_service: /steering/enable
+    mode_service: /ap/v1/mode_switch
+    status_topic: /ap/v1/status
+    safety_state_topic: /safety/state
+
+assistant:
+  ros__parameters:
+    # The API key is read from the environment variable OPENROUTER_API_KEY, never from here.
+    model: qwen/qwen3.8-27b       # accepts images and has Zero Data Retention providers
+    system_prompt: ''             # sent first with every question; empty = none
+    max_history_turns: 1000       # earlier questions and answers sent as memory
+    history_file: ~/.ros/collider/ai_history.jsonl   # empty = no file
+    image_topic: /iris/static_camera_sensor/image
+    max_image_age_sec: 2.0        # refuse to answer about an older (frozen) image
+    request_timeout_sec: 60.0
+
+car_detector:
+  ros__parameters:
+    image_topic: /iris/static_camera_sensor/image
+    detections_topic: /collider/cars
+    debug_image_topic: /collider/cars/image
+    model: /opt/models/yolo11n-visdrone.pt  # YOLO11n fine-tuned on top-down UAV images
+    classes: [car, van, bus, truck] # VisDrone vehicle names
+    confidence: 0.25                # aerial objects are small, so start below COCO's 0.4
+    device: ''                      # '' = cuda:0 if available, else cpu; or cpu, cuda:0
+    imgsz: 1280                     # internal letterbox size; boxes map back to the 640x480 input
+    focal_px: 205.47

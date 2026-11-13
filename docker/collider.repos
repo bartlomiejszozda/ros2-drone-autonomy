@@ -1,0 +1,37 @@
+# Workspace definition for Collider.
+#   git clone https://github.com/bartlomiejszozda/ros2-drone-autonomy.git src/collider
+#   vcs import --recursive src < src/collider/docker/collider.repos
+# Upstream repos are pinned to known-good commits; forks track the `collider` branch.
+repositories:
+  collider:
+    type: git
+    url: https://github.com/bartlomiejszozda/ros2-drone-autonomy.git
+    version: main
+  ardupilot:
+    type: git
+    url: https://github.com/ArduPilot/ardupilot.git
+    version: e204ca77a8012342b52af17beb78adaca598113c  # master, 2026-10-02
+  ardupilot_gazebo:
+    type: git
+    url: https://github.com/bartlomiejszozda/ardupilot_gazebo.git
+    version: collider
+  ardupilot_gz:
+    type: git
+    url: https://github.com/bartlomiejszozda/ardupilot_gz.git
+    version: collider
+  ardupilot_sitl_models:
+    type: git
+    url: https://github.com/ArduPilot/SITL_Models.git
+    version: d5d6017367a509b77886379c91207edc66f77652
+  micro_ros_agent:
+    type: git
+    url: https://github.com/micro-ROS/micro-ROS-Agent.git
+    version: 4f363a79ae96aed39dcc5269f53f73f6a70d3a2c
+  ros_gz:
+    type: git
+    url: https://github.com/gazebosim/ros_gz.git
+    version: 7976c44edb72eb577318cb404bf331e84eee040a
+  sdformat_urdf:
+    type: git
+    url: https://github.com/ros/sdformat_urdf.git
+    version: 4be22a54e48562323f3e9deecbe1bde894eb7508

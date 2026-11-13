@@ -1,0 +1,15 @@
+# Target height above home, in metres (Copter SITL with home at ground level).
+float64 altitude_m
+# Overall startup limit in seconds of node time (sim time with use_sim_time);
+# zero means no overall limit.
+float64 timeout_sec
+---
+bool success
+# True if cancellation/failure cleanup confirmed ground and disarmed state.
+bool cleanup_completed
+float64 altitude_m
+string message
+---
+string stage
+float64 altitude_m
+string message

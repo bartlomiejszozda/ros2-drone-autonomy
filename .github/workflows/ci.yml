@@ -1,0 +1,51 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    container: ros:humble
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out collider
+        uses: actions/checkout@v7
+        with:
+          path: ws/src/collider
+
+      - name: Check out ardupilot_msgs
+        uses: actions/checkout@v7
+        with:
+          repository: ArduPilot/ardupilot
+          ref: e204ca77a8012342b52af17beb78adaca598113c  # same pin as docker/collider.repos
+          path: ws/src/ardupilot
+          fetch-depth: 1
+          sparse-checkout: Tools/ros2/ardupilot_msgs
+
+      # collider_interfaces sits inside the collider package, where neither rosdep nor
+      # colcon looks for packages, so its path is passed explicitly.
+      - name: Install dependencies
+        run: |
+          apt-get update
+          rosdep update
+          rosdep install -y --ignore-src \
+            --from-paths ws/src ws/src/collider/interfaces/collider_interfaces
+
+      - name: Build
+        working-directory: ws
+        run: |
+          source /opt/ros/humble/setup.bash
+          colcon build --base-paths src src/collider/interfaces/collider_interfaces
+
+      - name: Test
+        working-directory: ws/src/collider
+        env:
+          ROS_DOMAIN_ID: '42'
+          ROS_LOCALHOST_ONLY: '1'
+        run: |
+          source ../../install/setup.bash
+          python3 -m pytest test -rs

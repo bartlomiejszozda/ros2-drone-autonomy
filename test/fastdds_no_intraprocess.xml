@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Used only by the tests (see conftest.py).
+
+The tests create and destroy many ROS nodes inside one Python process. Fast DDS
+normally hands messages directly to subscribers in the same process; when such a
+subscriber is being destroyed at that moment, Fast DDS 2.6 can crash (segfault in
+StatefulReader::processDataMsg). Real runs are unaffected: there every node is its
+own process. -->
+<dds xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+  <library_settings>
+    <intraprocess_delivery>OFF</intraprocess_delivery>
+  </library_settings>
+</dds>

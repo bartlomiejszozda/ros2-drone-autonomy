@@ -1,0 +1,11 @@
+# Overall time limit in seconds of node time (sim time with use_sim_time).
+# Zero means retry until ready.
+float64 timeout_sec
+---
+# Success means GUIDED was confirmed and the prearm check passed.
+bool ready
+string message
+---
+# MODE_CHANGE, PREARM, or READY.
+string stage
+string message

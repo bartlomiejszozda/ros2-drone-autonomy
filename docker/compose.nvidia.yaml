@@ -1,0 +1,14 @@
+# NVIDIA GPU for Gazebo rendering. Merged on top of docker-compose.yml when listed in .env:
+#   COMPOSE_FILE=docker-compose.yml:compose.nvidia.yaml
+# Needs the NVIDIA driver and nvidia-container-toolkit on the host.
+services:
+  dev:
+    environment:
+      NVIDIA_DRIVER_CAPABILITIES: all    # default has no graphics, so Gazebo would render on the CPU
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

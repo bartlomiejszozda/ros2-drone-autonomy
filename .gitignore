@@ -1,0 +1,25 @@
+# colcon output when built from inside this package
+/build/
+/install/
+/log/
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+
+# ament_python package-index marker is the only file kept in resource/
+/resource/*
+!/resource/collider
+
+# test artefacts
+test/tmp/
+
+# per-machine docker settings
+/docker/.env
+
+# editors
+.vscode/
+.idea/
+*~

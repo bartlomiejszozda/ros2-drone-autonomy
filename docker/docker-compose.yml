@@ -1,0 +1,41 @@
+# Collider dev container. On the host, from this directory:
+#   docker compose up -d --build
+#   ssh -A -p 10023 dev@localhost        (or through a tunnel, see README.md)
+# Settings can be overridden in a .env file next to this one (see README.md).
+# NVIDIA GPU: add compose.nvidia.yaml (COMPOSE_FILE in .env).
+name: collider
+
+services:
+  dev:
+    build:
+      context: ../../..                  # workspace root (holds src/)
+      dockerfile: src/collider/docker/Dockerfile
+      args:
+        HOST_UID: ${HOST_UID:-1000}
+        HOST_GID: ${HOST_GID:-1000}
+    image: collider-dev
+    hostname: collider
+    environment:
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-0}
+      DISPLAY: ${DISPLAY}
+      QT_X11_NO_MITSHM: "1"
+      NVIDIA_DRIVER_CAPABILITIES: all
+      __NV_PRIME_RENDER_OFFLOAD: "1"
+      __GLX_VENDOR_LIBRARY_NAME: nvidia
+    volumes:
+      - ../../..:/ws                     # workspace: src/ (git repos), build/, install/, log/
+      - home:/home/dev                   # shell history, git config, tool settings
+      - ${AUTHORIZED_KEYS:-${HOME}/.ssh/authorized_keys}:/home/dev/.ssh/authorized_keys:ro
+      - ccache:/ccache
+      - ssh-host-keys:/etc/ssh/host_keys
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    ports:
+      - 127.0.0.1:${SSH_PORT:-10023}:22
+      - 127.0.0.1:${VIDEO_PORT:-8765}:8765   # web_video_server
+    shm_size: 1gb                        # DDS shared memory transport; Docker's default is 64 MB
+    restart: unless-stopped
+
+volumes:
+  home:
+  ccache:
+  ssh-host-keys:

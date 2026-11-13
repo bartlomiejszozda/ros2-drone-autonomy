@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Like ask, but the assistant forgets the earlier conversation first:
+#   ask_new what do you see
+exec "$(dirname "$0")/ask" --new "$@"

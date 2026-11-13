@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Launch the sphere target in the runway world: hold it against gravity,
+# then give it a short upward push. Run while the simulator is up.
+set -euo pipefail
+world=${1:-runway}
+
+gz topic -t "/world/${world}/wrench/persistent" -m gz.msgs.EntityWrench \
+  -p "entity: {name: 'sphere', type: MODEL}, wrench: {force: {x: 0, y: 0, z: 9.80}}"
+gz topic -t "/world/${world}/wrench" -m gz.msgs.EntityWrench \
+  -p "entity: {name: 'sphere', type: MODEL}, wrench: {force: {x: 0, y: 0, z: 40000}}"
+sleep 3
+gz topic -t "/world/${world}/wrench" -m gz.msgs.EntityWrench \
+  -p "entity: {name: 'sphere', type: MODEL}, wrench: {force: {x: 0, y: 0, z: -40000}}"

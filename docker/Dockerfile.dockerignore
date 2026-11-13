@@ -1,0 +1,8 @@
+# Build context is the workspace root; send only what the image needs:
+# package.xml files (for rosdep) and the entrypoint.
+*
+!src/**/package.xml
+!src/collider/docker/entrypoint.sh
+src/build
+src/install
+src/log

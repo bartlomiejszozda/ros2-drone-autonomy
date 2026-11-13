@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Ask the assistant node a question about the camera image, without quotes:
+#   ask where is the red car
+#   ask --new describe the image      (forget the conversation first; same as ask_new)
+# Needs a sourced ROS workspace (ros2 on PATH) and a running assistant_node.
+set -euo pipefail
+
+new=false
+if [[ ${1:-} == --new ]]; then
+    new=true
+    shift
+fi
+if [[ $# -eq 0 ]]; then
+    echo "usage: $(basename "$0") <question>" >&2
+    exit 2
+fi
+if ! command -v ros2 > /dev/null; then
+    echo 'ros2 not found: source /opt/ros/humble/setup.bash and install/setup.bash' >&2
+    exit 1
+fi
+
+# The question goes inside a YAML string in double quotes: escape \ and ".
+question=${*//\\/\\\\}
+question=${question//\"/\\\"}
+exec ros2 action send_goal /collider/ask collider_interfaces/action/Ask \
+    "{question: \"$question\", new_conversation: $new}" --feedback

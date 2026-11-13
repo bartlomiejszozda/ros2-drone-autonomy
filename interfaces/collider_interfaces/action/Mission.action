@@ -1,0 +1,12 @@
+# Take off, steer for a while, then end the flight.
+float64 altitude_m       # takeoff height above home
+float64 duration_sec     # how long steering runs; 0 = until the goal is cancelled
+string end_action        # after steering: "land", "rtl" or "hover" (empty = "land")
+---
+bool success
+string message
+string last_stage        # stage the mission ended in
+---
+string stage             # CHECK, TAKEOFF, STEERING, FINISH, LAND, RTL, DONE
+float64 elapsed_sec      # time in the current stage
+string message

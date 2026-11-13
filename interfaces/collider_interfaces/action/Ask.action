@@ -1,0 +1,19 @@
+# Question for the model; the newest camera image is attached to it.
+string question
+# Forget earlier questions and answers first (the history file keeps them).
+bool new_conversation
+# OpenRouter model id, e.g. qwen/qwen3.8-27b; empty = the node's `model` parameter.
+string model
+---
+bool success
+string answer
+# Why it failed; empty on success.
+string message
+string model
+# Wall-clock seconds the model took to answer.
+float64 latency_sec
+# Earlier questions and answers sent along as conversation memory.
+int32 history_turns
+---
+string stage
+float64 elapsed_sec
