@@ -31,16 +31,22 @@ what the camera sees.
 
 ## Architecture
 
-```text
-Gazebo camera ──> tracker_node ──> target_motion_node ──> steering_node ──> ArduPilot (DDS)
-      │                                                         ▲
-      ├──> car_detector_node ──> /collider/cars                 │
-      └──> assistant_node (/collider/ask)          mission_node ┘   safety_node ──> BRAKE
-```
+![Collider components in a seven-layer robotics stack](docs/architecture-layers.svg)
+
+Collider covers perception, control, behavior and mission logic (layers 3, 4, 6 and 7).
+ArduPilot SITL provides state estimation, the inner control loops and flight modes, and
+Gazebo simulates the airframe, sensors and camera. Layer 5 is still empty: steering reacts
+to the current target bearing and does not plan a path.
+
+![Collider ROS 2 node graph](docs/node-graph.svg)
 
 Nodes talk through topics for continuous data (images, observations) and actions for
 anything with a start, progress and an end (takeoff, mission, assistant questions).
-See [docs/architecture.md](docs/architecture.md) for the full graph and design decisions,
+Only `steering`, `starter`, `safety` and `mission` send commands to ArduPilot.
+
+**[Interactive architecture page](https://bartlomiejszozda.github.io/ros2-drone-autonomy/architecture.html)**:
+both diagrams with link highlighting, launch arguments and ready-to-run commands.
+See [docs/architecture.md](docs/architecture.md) for design decisions
 and [docs/nodes.md](docs/nodes.md) for parameters and interfaces.
 
 ## Quick start

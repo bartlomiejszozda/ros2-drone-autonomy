@@ -1,0 +1,332 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="map layers" viewBox="0 0 1300 812" width="1300" height="812" role="img" aria-label="Collider components placed in the seven robotics layers: mission in layers 7 and 6, starter and safety in layer 6, nothing in layer 5, perception nodes in layer 4, steering in layer 3, thin adapters in layer 2; ArduPilot SITL covers layers 1 to 3 plus modes and failsafes; Gazebo is the simulated hardware.">
+<title>Collider in the seven-layer robotics stack</title>
+<style>
+:root {
+  --bg: #f4f5f2;
+  --panel: #ffffff;
+  --ink: #18212b;
+  --muted: #5b6672;
+  --line: #c6ccd3;
+  --line-strong: #8d97a2;
+  --veh: #c2410c;          /* anything that reaches ArduPilot */
+  --veh-soft: #fbece4;
+  --cam: #0f766e;          /* camera image */
+  --sim-soft: #eceee9;
+  --band: #e8eae5;
+  --tab-bg: #18212b;
+  --tab-fg: #f4f5f2;
+  --row-hi: #fbece4;
+  --display: "Space Grotesk", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --sans: "IBM Plex Sans", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #10151b; --panel: #18202a; --ink: #e3e8ed; --muted: #95a1ae; --line: #2f3a46;
+  --line-strong: #5d6a78; --veh: #fb923c; --veh-soft: #2e1d12; --cam: #2dd4bf;
+  --sim-soft: #161c22; --tab-bg: #e3e8ed; --tab-fg: #10151b; --row-hi: #2e1d12; --band: #151b21;
+  
+} }
+.map .bgr { fill: var(--bg); stroke: var(--line); }
+.map text { font-family: var(--mono); font-size: 10.5px; fill: var(--ink); }
+.map .t-name { font-family: var(--display); font-size: 15px; font-weight: 600; }
+.map .t-exe { fill: var(--muted); }
+.map .t-role { font-family: var(--sans); font-size: 12px; }
+.map .t-tog { fill: var(--muted); font-size: 10px; }
+.map .t-ap { fill: var(--veh); font-size: 10px; }
+.map .t-out { fill: var(--muted); font-size: 9.5px; }
+.map .t-head { fill: var(--muted); font-size: 9px; letter-spacing: 0.08em; }
+.map .t-small { font-family: var(--sans); font-size: 11px; fill: var(--muted); }
+.map .card { fill: var(--panel); stroke: var(--line-strong); stroke-width: 1.2; }
+.map .card.ext { stroke-dasharray: 4 3; }
+.map .card.ap { fill: var(--veh-soft); stroke: var(--veh); }
+.map .card.sim { fill: var(--sim-soft); }
+.map .tab-r { fill: var(--tab-bg); }
+.map .tab-t { fill: var(--tab-fg); font-weight: 500; }
+.map .zone { fill: none; stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 7 5; }
+.map .zlabel { font-weight: 600; font-size: 11.5px; fill: var(--muted); }
+.map .zlabel tspan.n { font-weight: 400; }
+.map .edge path { fill: none; stroke-width: 1.6; }
+.map .edge.srv path { stroke-dasharray: 6 4; }
+.map .edge.act path { stroke-width: 3.4; }
+.map .edge.link path { stroke-dasharray: 1 4; stroke-linecap: round; stroke-width: 2; }
+.map .edge.ink path { stroke: var(--ink); }
+.map .edge.veh path { stroke: var(--veh); }
+.map .edge.cam path { stroke: var(--cam); }
+.map .edge.mut path { stroke: var(--muted); }
+.map .edge text { paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+.map .edge.veh text { fill: var(--veh); }
+.map .edge.cam text { fill: var(--cam); }
+.map .edge.mut text { fill: var(--muted); }
+.map .edge text.sub { fill: var(--muted); font-size: 9.5px; }
+.map .mk-ink { fill: var(--ink); }
+.map .mk-veh { fill: var(--veh); }
+.map .mk-cam { fill: var(--cam); }
+.map .mk-mut { fill: var(--muted); }
+.map .band { fill: var(--band); }
+.map .t-num { font-family: var(--display); font-size: 20px; font-weight: 600; fill: var(--muted); }
+.map .t-lname { font-family: var(--sans); font-size: 12.5px; font-weight: 600; }
+.map .t-ldesc { font-family: var(--sans); font-size: 10px; fill: var(--muted); }
+.map .t-colh { font-family: var(--display); font-size: 13px; font-weight: 600; }
+.map .t-colh.veh { fill: var(--veh); }
+.map .t-colh tspan { font-family: var(--sans); font-weight: 400; font-size: 11.5px; fill: var(--muted); }
+.map .t-nm { font-family: var(--display); font-size: 12.5px; font-weight: 600; }
+.map .t-l { font-family: var(--sans); font-size: 10.5px; }
+.map .t-lm { font-family: var(--sans); font-size: 10.5px; fill: var(--muted); }
+.map .t-m10 { font-size: 10px; }
+.map .t-note { font-family: var(--sans); font-size: 11px; fill: var(--muted); }
+.map .gap { fill: none; stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 4 4; }
+.map .apcol { fill: var(--veh-soft); stroke: var(--veh); stroke-width: 1.2; }
+.map .apdiv { stroke: var(--veh); stroke-opacity: 0.35; stroke-dasharray: 3 3; }
+.map .divider { stroke: var(--line-strong); stroke-dasharray: 3 3; }
+</style>
+<rect class="bgr" x="0.5" y="0.5" width="1299" height="811" rx="12"/>
+
+        <defs>
+          <marker id="l-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="mk-ink" d="M0,1 L9,5 L0,9 z"/></marker>
+          <marker id="l-veh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="mk-veh" d="M0,1 L9,5 L0,9 z"/></marker>
+          <marker id="l-cam" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="mk-cam" d="M0,1 L9,5 L0,9 z"/></marker>
+          <marker id="l-mut" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="mk-mut" d="M0,1 L9,5 L0,9 z"/></marker>
+        </defs>
+
+        <!-- column headers -->
+        <text class="t-head" x="28" y="34">LAYER</text>
+        <text class="t-colh" x="256" y="34">Simulator</text>
+        <text class="t-colh" x="452" y="34">Collider<tspan> · ROS 2 nodes</tspan></text>
+        <text class="t-colh veh" x="1060" y="34">ArduPilot SITL<tspan> · plus its bridges</tspan></text>
+
+        <!-- bands -->
+        <rect class="band" x="16" y="52" width="1268" height="88" rx="10"/>
+        <rect class="band" x="16" y="148" width="1268" height="104" rx="10"/>
+        <rect class="band" x="16" y="260" width="1268" height="76" rx="10"/>
+        <rect class="band" x="16" y="344" width="1268" height="132" rx="10"/>
+        <rect class="band" x="16" y="484" width="1268" height="88" rx="10"/>
+        <rect class="band" x="16" y="580" width="1268" height="108" rx="10"/>
+        <rect class="band" x="16" y="696" width="1268" height="104" rx="10"/>
+
+        <!-- layer labels -->
+        <text class="t-num" x="28" y="79">7</text>
+        <text class="t-lname" x="52" y="79">Mission &amp; Task Planning</text>
+        <text class="t-ldesc" x="52" y="97">Goals, missions, task allocation,</text>
+        <text class="t-ldesc" x="52" y="110">fleet coordination</text>
+
+        <text class="t-num" x="28" y="175">6</text>
+        <text class="t-lname" x="52" y="175">Behavior &amp; Decision Making</text>
+        <text class="t-ldesc" x="52" y="193">Behavior trees, state machines,</text>
+        <text class="t-ldesc" x="52" y="206">obstacle avoidance</text>
+
+        <text class="t-num" x="28" y="287">5</text>
+        <text class="t-lname" x="52" y="287">Motion &amp; Path Planning</text>
+        <text class="t-ldesc" x="52" y="305">Global/local path planning,</text>
+        <text class="t-ldesc" x="52" y="318">trajectory generation</text>
+
+        <text class="t-num" x="28" y="371">4</text>
+        <text class="t-lname" x="52" y="371">Localization &amp; Perception</text>
+        <text class="t-ldesc" x="52" y="389">SLAM, sensor fusion, object</text>
+        <text class="t-ldesc" x="52" y="402">detection, mapping</text>
+
+        <text class="t-num" x="28" y="511">3</text>
+        <text class="t-lname" x="52" y="511">Control</text>
+        <text class="t-ldesc" x="52" y="529">PID, MPC, trajectory tracking,</text>
+        <text class="t-ldesc" x="52" y="542">stabilization</text>
+
+        <text class="t-num" x="28" y="607">2</text>
+        <text class="t-lname" x="52" y="607">Hardware Abstraction</text>
+        <text class="t-lname" x="52" y="623">&amp; Drivers</text>
+        <text class="t-ldesc" x="52" y="641">Sensors, actuators, interfaces,</text>
+        <text class="t-ldesc" x="52" y="654">communication buses</text>
+
+        <text class="t-num" x="28" y="723">1</text>
+        <text class="t-lname" x="52" y="723">Hardware &amp; Firmware</text>
+        <text class="t-ldesc" x="52" y="741">Motors, cameras, IMUs,</text>
+        <text class="t-ldesc" x="52" y="754">embedded controllers</text>
+
+        <!-- gaps (not covered) and notes -->
+        <rect class="gap" x="648" y="66" width="388" height="62" rx="8"/>
+        <text class="t-note" x="664" y="92">Not covered: fleet coordination, task allocation.</text>
+        <text class="t-note" x="664" y="109">One drone, one goal at a time.</text>
+
+        <rect class="gap" x="452" y="272" width="584" height="52" rx="8"/>
+        <text class="t-note" x="468" y="294">Not covered yet: steering reacts to the current bearing, nothing plans a path.</text>
+        <text class="t-note" x="468" y="311">Planned: steering that takes the drone's inertia into account.</text>
+
+        <text class="t-note" x="466" y="520">Collider's only controller: bearing error → yaw rate and climb.</text>
+        <text class="t-note" x="466" y="537">ArduPilot closes the inner loops (right).</text>
+
+        <text class="t-note" x="466" y="620">Thin adapters only; the drivers</text>
+        <text class="t-note" x="466" y="636">live in ArduPilot and Gazebo.</text>
+
+        <text class="t-note" x="466" y="790">Collider has no hardware of its own: it runs on the PC.</text>
+
+        <!-- ===== edges ===== -->
+        <g class="edge link cam" data-ends="gazebo bridge">
+          <path d="M346,712 V652" marker-end="url(#l-cam)"/>
+          <text x="354" y="684">camera (gz)</text>
+        </g>
+        <g class="edge topic cam" data-ends="bridge car_detector assistant tracker">
+          <path d="M346,596 V454 H767"/>
+          <path d="M511,454 V432" marker-end="url(#l-cam)"/>
+          <path d="M639,454 V432" marker-end="url(#l-cam)"/>
+          <path d="M767,454 V432" marker-end="url(#l-cam)"/>
+          <text x="360" y="470">/iris/static_camera_sensor/image</text>
+        </g>
+        <g class="edge topic ink" data-ends="tracker target_motion">
+          <path d="M826,399 H872" marker-end="url(#l-ink)"/>
+          <text class="sub" x="849" y="391" text-anchor="middle" style="fill: var(--ink)">target</text>
+        </g>
+        <g class="edge topic veh" data-ends="ap target_motion">
+          <path d="M1060,414 H1036" marker-end="url(#l-veh)"/>
+        </g>
+        <g class="edge topic ink" data-ends="target_motion steering">
+          <path d="M954,432 V498" marker-end="url(#l-ink)"/>
+          <text x="946" y="468" text-anchor="end">target_track</text>
+        </g>
+        <g class="edge link ink" data-ends="steering backends">
+          <path d="M954,558 V596" marker-end="url(#l-ink)"/>
+          <text x="946" y="582" text-anchor="end">DesiredMotion</text>
+        </g>
+        <g class="edge topic veh" data-ends="backends ap">
+          <path d="M1036,624 H1060" marker-end="url(#l-veh)"/>
+        </g>
+        <g class="edge link mut" data-ends="gazebo ap">
+          <path d="M436,750 H1060" marker-start="url(#l-mut)" marker-end="url(#l-mut)"/>
+          <text x="748" y="742" text-anchor="middle">JSON FDM · UDP 9002 · lockstep</text>
+          <text class="sub" x="748" y="766" text-anchor="middle">motor commands → physics · sensor readings → firmware</text>
+        </g>
+        <g class="edge act ink" data-ends="mission starter">
+          <path d="M608,181 H648" marker-end="url(#l-ink)"/>
+        </g>
+        <g class="edge srv veh" data-ends="starter ap">
+          <path d="M868,181 H1060" marker-end="url(#l-veh)"/>
+          <text x="964" y="174" text-anchor="middle">arm · takeoff · mode_switch</text>
+        </g>
+        <g class="edge srv veh" data-ends="safety ap">
+          <path d="M868,229 H1060" marker-end="url(#l-veh)"/>
+          <text x="964" y="222" text-anchor="middle">BRAKE, then LAND or RTL</text>
+        </g>
+
+        <!-- ===== Collider ===== -->
+        <g class="node" data-node="mission" aria-label="mission_node, layers 7 and 6">
+          <rect class="card" x="452" y="64" width="156" height="176" rx="8"/>
+          <rect class="tab-r" x="462" y="53" width="106" height="22" rx="11"/>
+          <text class="tab-t" x="472" y="68">▶ /mission/run</text>
+          <text class="t-nm" x="466" y="94">mission</text>
+          <text class="t-exe" x="466" y="109">mission_node</text>
+          <text class="t-l" x="466" y="124">goal: altitude, time,</text>
+          <text class="t-l" x="466" y="136">end action</text>
+          <line class="divider" x1="452" y1="144" x2="608" y2="144"/>
+          <text class="t-lm" x="466" y="164">stage machine</text>
+          <text class="t-m10" x="466" y="180">CHECK → TAKEOFF</text>
+          <text class="t-m10" x="466" y="194">→ STEERING → FINISH</text>
+          <text class="t-m10" x="466" y="208">→ LAND / RTL / hover</text>
+          <text class="t-lm" x="466" y="230">enables steering (L3)</text>
+        </g>
+
+        <g class="node" data-node="starter" aria-label="starter_node, layer 6">
+          <rect class="card" x="648" y="162" width="220" height="38" rx="7"/>
+          <text class="t-nm" x="660" y="177">starter</text>
+          <text class="t-lm" x="660" y="192">arm → take off, cleans up on cancel</text>
+        </g>
+
+        <g class="node" data-node="safety" aria-label="safety_node, layer 6">
+          <rect class="card" x="648" y="210" width="220" height="38" rx="7"/>
+          <text class="t-nm" x="660" y="225">safety</text>
+          <text class="t-lm" x="660" y="240">violation → BRAKE, steering off</text>
+        </g>
+
+        <g class="node" data-node="car_detector" aria-label="car_detector_node, layer 4">
+          <rect class="card" x="452" y="366" width="118" height="66" rx="8"/>
+          <text class="t-nm" x="464" y="386">car_detector</text>
+          <text class="t-l" x="464" y="404">YOLO vehicles</text>
+          <text class="t-lm" x="464" y="419">no consumer yet</text>
+        </g>
+
+        <g class="node" data-node="assistant" aria-label="assistant_node, layer 4">
+          <rect class="card" x="580" y="366" width="118" height="66" rx="8"/>
+          <text class="t-nm" x="592" y="386">assistant</text>
+          <text class="t-l" x="592" y="404">vision-language</text>
+          <text class="t-lm" x="592" y="419">operator Q&amp;A</text>
+        </g>
+
+        <g class="node" data-node="tracker" aria-label="tracker_node, layer 4">
+          <rect class="card" x="708" y="366" width="118" height="66" rx="8"/>
+          <text class="t-nm" x="720" y="386">tracker</text>
+          <text class="t-l" x="720" y="404">finds the sphere,</text>
+          <text class="t-lm" x="720" y="419">pixels → angles</text>
+        </g>
+
+        <g class="node" data-node="target_motion" aria-label="target_motion_node, layer 4">
+          <rect class="card" x="872" y="366" width="164" height="66" rx="8"/>
+          <text class="t-nm" x="884" y="386">target_motion</text>
+          <text class="t-l" x="884" y="404">fuses angles + attitude</text>
+          <text class="t-lm" x="884" y="419">filters bearing + rate</text>
+        </g>
+
+        <g class="node" data-node="steering" aria-label="steering_node, layer 3">
+          <rect class="card" x="872" y="498" width="164" height="60" rx="8"/>
+          <text class="t-nm" x="884" y="518">steering</text>
+          <text class="t-l" x="884" y="535">Centering, 10 Hz</text>
+          <text class="t-lm" x="884" y="550">on/off: mission, safety</text>
+        </g>
+
+        <g class="node" data-node="backends" data-row="steering" aria-label="steering backends, layer 2">
+          <rect class="card" x="872" y="596" width="164" height="56" rx="8"/>
+          <text class="t-nm" x="884" y="616">steering backends</text>
+          <text class="t-l" x="884" y="632">cmd_vel (DDS) or</text>
+          <text class="t-l" x="884" y="646">RC override (MAVLink)</text>
+        </g>
+
+        <!-- ===== Simulator ===== -->
+        <g class="node" data-node="bridge" aria-label="ros_gz_bridge, layer 2">
+          <rect class="card" x="256" y="596" width="180" height="56" rx="8"/>
+          <text class="t-nm" x="268" y="616">ros_gz_bridge</text>
+          <text class="t-l" x="268" y="632">Gazebo topics → ROS 2</text>
+          <text class="t-lm" x="268" y="646">image, /clock, IMU …</text>
+        </g>
+
+        <g class="node" data-node="gazebo" aria-label="Gazebo Harmonic, layer 1">
+          <rect class="card" x="256" y="712" width="180" height="76" rx="8"/>
+          <text class="t-nm" x="268" y="732">Gazebo Harmonic</text>
+          <text class="t-l" x="268" y="748">Iris frame, motors, physics</text>
+          <text class="t-l" x="268" y="762">camera 640×480, IMU, GPS</text>
+          <text class="t-lm" x="268" y="776">sphere target, cars</text>
+        </g>
+
+        <!-- ===== ArduPilot column ===== -->
+        <g class="node" data-node="ap" aria-label="ArduPilot SITL, layers 1 to 7">
+          <rect class="apcol" x="1060" y="52" width="224" height="748" rx="10"/>
+          <line class="apdiv" x1="1060" y1="144" x2="1284" y2="144"/>
+          <line class="apdiv" x1="1060" y1="256" x2="1284" y2="256"/>
+          <line class="apdiv" x1="1060" y1="340" x2="1284" y2="340"/>
+          <line class="apdiv" x1="1060" y1="480" x2="1284" y2="480"/>
+          <line class="apdiv" x1="1060" y1="576" x2="1284" y2="576"/>
+          <line class="apdiv" x1="1060" y1="692" x2="1284" y2="692"/>
+          <text class="t-nm" x="1074" y="78" style="fill: var(--muted)">AUTO missions</text>
+          <text class="t-lm" x="1074" y="94">waypoint lists, unused here</text>
+
+          <text class="t-nm" x="1074" y="172">Flight modes &amp; failsafes</text>
+          <text class="t-l" x="1074" y="189">GUIDED · LOITER · BRAKE</text>
+          <text class="t-l" x="1074" y="204">LAND · RTL · arming checks</text>
+
+          <text class="t-nm" x="1074" y="284">Target shaping</text>
+          <text class="t-l" x="1074" y="300">smooths GUIDED velocity targets</text>
+          <text class="t-lm" x="1074" y="315">WPNav (AUTO), unused here</text>
+
+          <text class="t-nm" x="1074" y="370">AHRS / EKF</text>
+          <text class="t-l" x="1074" y="387">AHRS_EKF_TYPE 10 in SITL:</text>
+          <text class="t-l" x="1074" y="402">state taken from the simulator</text>
+          <text class="t-lm" x="1074" y="432">pose/filtered ⇢ target_motion</text>
+
+          <text class="t-nm" x="1074" y="510">Position, attitude, rate</text>
+          <text class="t-l" x="1074" y="527">PID loops → motor outputs</text>
+          <text class="t-lm" x="1074" y="542">the inner loops</text>
+
+          <text class="t-nm" x="1074" y="606">Comms &amp; HAL</text>
+          <text class="t-l" x="1074" y="623">AP_DDS ⇄ micro_ros_agent</text>
+          <text class="t-l" x="1074" y="638">MAVLink ⇄ MAVProxy</text>
+          <text class="t-lm" x="1074" y="653">simulated sensor drivers</text>
+
+          <text class="t-nm" x="1074" y="722">SITL firmware</text>
+          <text class="t-l" x="1074" y="739">arducopter built for the PC</text>
+          <text class="t-lm" x="1074" y="754">instead of a flight controller</text>
+        </g>
+      </svg>

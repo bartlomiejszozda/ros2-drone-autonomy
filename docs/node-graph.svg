@@ -1,0 +1,359 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="map" viewBox="0 0 1270 824" width="1270" height="824" role="img" aria-label="Collider node graph: camera images flow from the Gazebo bridge into tracker, car_detector and assistant; tracker feeds target_motion, which feeds steering; steering sends cmd_vel or RC override to ArduPilot; mission drives starter and steering; safety can brake the vehicle, disable steering and cancel takeoff.">
+<title>Collider ROS 2 node graph</title>
+<style>
+:root {
+  --bg: #f4f5f2;
+  --panel: #ffffff;
+  --ink: #18212b;
+  --muted: #5b6672;
+  --line: #c6ccd3;
+  --line-strong: #8d97a2;
+  --veh: #c2410c;          /* anything that reaches ArduPilot */
+  --veh-soft: #fbece4;
+  --cam: #0f766e;          /* camera image */
+  --sim-soft: #eceee9;
+  --band: #e8eae5;
+  --tab-bg: #18212b;
+  --tab-fg: #f4f5f2;
+  --row-hi: #fbece4;
+  --display: "Space Grotesk", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --sans: "IBM Plex Sans", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #10151b; --panel: #18202a; --ink: #e3e8ed; --muted: #95a1ae; --line: #2f3a46;
+  --line-strong: #5d6a78; --veh: #fb923c; --veh-soft: #2e1d12; --cam: #2dd4bf;
+  --sim-soft: #161c22; --tab-bg: #e3e8ed; --tab-fg: #10151b; --row-hi: #2e1d12; --band: #151b21;
+  
+} }
+.map .bgr { fill: var(--bg); stroke: var(--line); }
+.map text { font-family: var(--mono); font-size: 10.5px; fill: var(--ink); }
+.map .t-name { font-family: var(--display); font-size: 15px; font-weight: 600; }
+.map .t-exe { fill: var(--muted); }
+.map .t-role { font-family: var(--sans); font-size: 12px; }
+.map .t-tog { fill: var(--muted); font-size: 10px; }
+.map .t-ap { fill: var(--veh); font-size: 10px; }
+.map .t-out { fill: var(--muted); font-size: 9.5px; }
+.map .t-head { fill: var(--muted); font-size: 9px; letter-spacing: 0.08em; }
+.map .t-small { font-family: var(--sans); font-size: 11px; fill: var(--muted); }
+.map .card { fill: var(--panel); stroke: var(--line-strong); stroke-width: 1.2; }
+.map .card.ext { stroke-dasharray: 4 3; }
+.map .card.ap { fill: var(--veh-soft); stroke: var(--veh); }
+.map .card.sim { fill: var(--sim-soft); }
+.map .tab-r { fill: var(--tab-bg); }
+.map .tab-t { fill: var(--tab-fg); font-weight: 500; }
+.map .zone { fill: none; stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 7 5; }
+.map .zlabel { font-weight: 600; font-size: 11.5px; fill: var(--muted); }
+.map .zlabel tspan.n { font-weight: 400; }
+.map .edge path { fill: none; stroke-width: 1.6; }
+.map .edge.srv path { stroke-dasharray: 6 4; }
+.map .edge.act path { stroke-width: 3.4; }
+.map .edge.link path { stroke-dasharray: 1 4; stroke-linecap: round; stroke-width: 2; }
+.map .edge.ink path { stroke: var(--ink); }
+.map .edge.veh path { stroke: var(--veh); }
+.map .edge.cam path { stroke: var(--cam); }
+.map .edge.mut path { stroke: var(--muted); }
+.map .edge text { paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+.map .edge.veh text { fill: var(--veh); }
+.map .edge.cam text { fill: var(--cam); }
+.map .edge.mut text { fill: var(--muted); }
+.map .edge text.sub { fill: var(--muted); font-size: 9.5px; }
+.map .mk-ink { fill: var(--ink); }
+.map .mk-veh { fill: var(--veh); }
+.map .mk-cam { fill: var(--cam); }
+.map .mk-mut { fill: var(--muted); }
+.map .band { fill: var(--band); }
+.map .t-num { font-family: var(--display); font-size: 20px; font-weight: 600; fill: var(--muted); }
+.map .t-lname { font-family: var(--sans); font-size: 12.5px; font-weight: 600; }
+.map .t-ldesc { font-family: var(--sans); font-size: 10px; fill: var(--muted); }
+.map .t-colh { font-family: var(--display); font-size: 13px; font-weight: 600; }
+.map .t-colh.veh { fill: var(--veh); }
+.map .t-colh tspan { font-family: var(--sans); font-weight: 400; font-size: 11.5px; fill: var(--muted); }
+.map .t-nm { font-family: var(--display); font-size: 12.5px; font-weight: 600; }
+.map .t-l { font-family: var(--sans); font-size: 10.5px; }
+.map .t-lm { font-family: var(--sans); font-size: 10.5px; fill: var(--muted); }
+.map .t-m10 { font-size: 10px; }
+.map .t-note { font-family: var(--sans); font-size: 11px; fill: var(--muted); }
+.map .gap { fill: none; stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 4 4; }
+.map .apcol { fill: var(--veh-soft); stroke: var(--veh); stroke-width: 1.2; }
+.map .apdiv { stroke: var(--veh); stroke-opacity: 0.35; stroke-dasharray: 3 3; }
+.map .divider { stroke: var(--line-strong); stroke-dasharray: 3 3; }
+</style>
+<rect class="bgr" x="0.5" y="0.5" width="1269" height="823" rx="12"/>
+
+        <defs>
+          <marker id="ah-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="mk-ink" d="M0,1 L9,5 L0,9 z"/></marker>
+          <marker id="ah-veh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="mk-veh" d="M0,1 L9,5 L0,9 z"/></marker>
+          <marker id="ah-cam" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="mk-cam" d="M0,1 L9,5 L0,9 z"/></marker>
+          <marker id="ah-mut" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="mk-mut" d="M0,1 L9,5 L0,9 z"/></marker>
+        </defs>
+
+        <!-- zones -->
+        <rect class="zone" x="48" y="112" width="848" height="548" rx="14"/>
+        <text class="zlabel" x="56" y="104">collider.launch.py</text>
+        <path class="zone" d="M1032,112 H1256 V812 H14 V676 H1032 Z"/>
+        <text class="zlabel" x="384" y="700">with_sim:=true <tspan class="n">starts this: ardupilot_gz_bringup / iris_runway.launch.py</tspan></text>
+        <text class="t-small" x="884" y="650" text-anchor="end">every Collider node follows Gazebo's /clock (use_sim_time:=True)</text>
+
+        <!-- ===== edges ===== -->
+        <!-- camera image bus -->
+        <g class="edge topic cam" data-ends="bridge assistant tracker car_detector">
+          <path d="M64,752 H30 V204"/>
+          <path d="M30,204 H64" marker-end="url(#ah-cam)"/>
+          <path d="M30,392 H64" marker-end="url(#ah-cam)"/>
+          <path d="M30,580 H64" marker-end="url(#ah-cam)"/>
+          <text x="40" y="700">/iris/static_camera_sensor/image</text>
+        </g>
+
+        <!-- tracker -> target_motion -->
+        <g class="edge topic ink" data-ends="tracker target_motion">
+          <path d="M240,410 H256 V570 H384" marker-end="url(#ah-ink)"/>
+          <text x="264" y="486">/collider/target</text>
+          <text class="sub" x="264" y="500">TargetObservation</text>
+        </g>
+
+        <!-- target_motion -> steering -->
+        <g class="edge topic ink" data-ends="target_motion steering">
+          <path d="M430,526 V446" marker-end="url(#ah-ink)"/>
+          <text x="438" y="482">/collider/target_track</text>
+          <text class="sub" x="438" y="496">TargetTrack</text>
+        </g>
+
+        <!-- mission -> starter (action) -->
+        <g class="edge act ink" data-ends="mission starter">
+          <path d="M560,186 H704" marker-end="url(#ah-ink)"/>
+          <text x="632" y="176" text-anchor="middle">/starter/takeoff</text>
+          <text class="sub" x="632" y="202" text-anchor="middle">Takeoff action</text>
+        </g>
+
+        <!-- mission -> steering enable -->
+        <g class="edge srv ink" data-ends="mission steering">
+          <path d="M540,258 V338" marker-end="url(#ah-ink)"/>
+          <text x="532" y="292" text-anchor="end">/steering/enable</text>
+          <text class="sub" x="532" y="305" text-anchor="end">on / off</text>
+        </g>
+
+        <!-- safety -> steering enable false -->
+        <g class="edge srv ink" data-ends="safety steering">
+          <path d="M704,384 H560" marker-end="url(#ah-ink)"/>
+          <text x="632" y="376" text-anchor="middle">/steering/enable</text>
+          <text class="sub" x="632" y="398" text-anchor="middle">data: false</text>
+        </g>
+
+        <!-- safety -> /safety/state -> starter, mission -->
+        <g class="edge topic ink" data-ends="safety starter mission">
+          <path d="M850,338 V300 H632 V236 H560" marker-end="url(#ah-ink)"/>
+          <path d="M850,300 V258" marker-end="url(#ah-ink)"/>
+          <text x="640" y="292">/safety/state</text>
+          <text class="sub" x="640" y="316">latched</text>
+        </g>
+
+        <!-- safety -> starter cancel -->
+        <g class="edge srv ink" data-ends="safety starter">
+          <path d="M868,338 V258" marker-end="url(#ah-ink)"/>
+          <text x="875" y="290">cancel_goal</text>
+          <text class="sub" x="875" y="303">takeoff</text>
+        </g>
+
+        <!-- mission -> AP mode_switch -->
+        <g class="edge srv veh" data-ends="mission ap">
+          <path d="M544,150 V92 H1080 V150" marker-end="url(#ah-veh)"/>
+          <text x="600" y="85">mode_switch <tspan class="sub" style="fill: var(--muted)">GUIDED or LOITER to steer, then LAND or RTL</tspan></text>
+        </g>
+
+        <!-- starter -> AP -->
+        <g class="edge srv veh" data-ends="starter ap">
+          <path d="M880,204 H1050" marker-end="url(#ah-veh)"/>
+          <text x="902" y="184" style="font-size: 10px">mode_switch</text>
+          <text x="902" y="196" style="font-size: 10px">prearm_check</text>
+          <text x="902" y="220" style="font-size: 10px">arm_motors</text>
+          <text x="902" y="232" style="font-size: 10px">experimental/takeoff</text>
+        </g>
+
+        <!-- safety -> AP -->
+        <g class="edge srv veh" data-ends="safety ap">
+          <path d="M880,384 H1050" marker-end="url(#ah-veh)"/>
+          <text x="902" y="376">mode_switch</text>
+          <text class="sub" x="902" y="398">BRAKE, LAND, RTL</text>
+        </g>
+
+        <!-- steering -> AP cmd_vel -->
+        <g class="edge topic veh" data-ends="steering ap">
+          <path d="M560,416 H620 V490 H1080 V446" marker-end="url(#ah-veh)"/>
+          <text x="700" y="482">/ap/v1/cmd_vel</text>
+          <text class="sub" x="700" y="506">backend:=cmd_vel · needs GUIDED</text>
+        </g>
+
+        <!-- steering -> MAVProxy RC override -->
+        <g class="edge link veh" data-ends="steering mavproxy">
+          <path d="M560,434 H600 V570 H1050" marker-end="url(#ah-veh)"/>
+          <text x="700" y="562">RC_CHANNELS_OVERRIDE</text>
+          <text class="sub" x="700" y="586">MAVLink udp:14550 · backend:=rc · needs LOITER</text>
+        </g>
+
+        <!-- assistant -> OpenRouter -->
+        <g class="edge link mut" data-ends="assistant openrouter">
+          <path d="M214,150 V76" marker-end="url(#ah-mut)"/>
+          <text x="222" y="100">HTTPS</text>
+        </g>
+
+        <!-- Gazebo -> bridge -->
+        <g class="edge link mut" data-ends="gazebo bridge">
+          <path d="M384,752 H240" marker-end="url(#ah-mut)"/>
+          <text x="312" y="744" text-anchor="middle">gz transport</text>
+        </g>
+
+        <!-- Gazebo <-> SITL -->
+        <g class="edge link mut" data-ends="gazebo sitl">
+          <path d="M880,752 H1050" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+          <text x="965" y="744" text-anchor="middle">JSON FDM · UDP 9002</text>
+          <text class="sub" x="965" y="768" text-anchor="middle">lockstep</text>
+        </g>
+
+        <!-- SITL <-> MAVProxy -->
+        <g class="edge link mut" data-ends="sitl mavproxy">
+          <path d="M1110,712 V606" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+          <text x="1102" y="662" text-anchor="end">MAVLink</text>
+        </g>
+
+        <!-- SITL <-> micro_ros_agent -->
+        <g class="edge link mut" data-ends="sitl ap">
+          <path d="M1222,712 V446" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+          <text x="1214" y="662" text-anchor="end">XRCE-DDS</text>
+        </g>
+
+        <!-- ===== Collider nodes ===== -->
+        <g class="node" data-node="assistant" aria-label="assistant_node">
+          <rect class="card" x="64" y="150" width="176" height="108" rx="8"/>
+          <rect class="tab-r" x="74" y="139" width="114" height="22" rx="11"/>
+          <text class="tab-t" x="84" y="154">▶ /collider/ask</text>
+          <text class="t-name" x="78" y="182">assistant</text>
+          <text class="t-exe" x="78" y="198">assistant_node</text>
+          <text class="t-role" x="78" y="217">AI answers about the image</text>
+          <text class="t-tog" x="78" y="235">assistant:=true</text>
+          <text class="t-out" x="78" y="250">needs OPENROUTER_API_KEY</text>
+        </g>
+
+        <g class="node" data-node="tracker" aria-label="tracker_node">
+          <rect class="card" x="64" y="338" width="176" height="108" rx="8"/>
+          <text class="t-name" x="78" y="370">tracker</text>
+          <text class="t-exe" x="78" y="386">tracker_node</text>
+          <text class="t-role" x="78" y="405">finds the black sphere</text>
+          <text class="t-tog" x="78" y="423">always started</text>
+          <text class="t-out" x="78" y="438">⇢ /collider/tracker/image</text>
+        </g>
+
+        <g class="node" data-node="car_detector" aria-label="car_detector_node">
+          <rect class="card" x="64" y="526" width="176" height="108" rx="8"/>
+          <text class="t-name" x="78" y="558">car_detector</text>
+          <text class="t-exe" x="78" y="574">car_detector_node</text>
+          <text class="t-role" x="78" y="593">YOLO finds vehicles</text>
+          <text class="t-tog" x="78" y="611">car_detector:=true</text>
+          <text class="t-out" x="78" y="626">⇢ /collider/cars + /image</text>
+        </g>
+
+        <g class="node" data-node="mission" aria-label="mission_node">
+          <rect class="card" x="384" y="150" width="176" height="108" rx="8"/>
+          <rect class="tab-r" x="394" y="139" width="106" height="22" rx="11"/>
+          <text class="tab-t" x="404" y="154">▶ /mission/run</text>
+          <text class="t-name" x="398" y="182">mission</text>
+          <text class="t-exe" x="398" y="198">mission_node</text>
+          <text class="t-role" x="398" y="217">takeoff → steer → finish</text>
+          <text class="t-tog" x="398" y="235">mission:=true</text>
+          <text class="t-ap" x="398" y="250">◂ /ap/v1 status</text>
+        </g>
+
+        <g class="node" data-node="steering" aria-label="steering_node">
+          <rect class="card" x="384" y="338" width="176" height="108" rx="8"/>
+          <rect class="tab-r" x="394" y="327" width="130" height="22" rx="11"/>
+          <text class="tab-t" x="404" y="342">▶ /steering/enable</text>
+          <text class="t-name" x="398" y="370">steering</text>
+          <text class="t-exe" x="398" y="386">steering_node</text>
+          <text class="t-role" x="398" y="405">keeps the target centred</text>
+          <text class="t-tog" x="398" y="423">steering:=true</text>
+          <text class="t-ap" x="398" y="438">◂ /ap/v1 status, pose</text>
+        </g>
+
+        <g class="node" data-node="target_motion" aria-label="target_motion_node">
+          <rect class="card" x="384" y="526" width="176" height="108" rx="8"/>
+          <text class="t-name" x="398" y="558">target_motion</text>
+          <text class="t-exe" x="398" y="574">target_motion_node</text>
+          <text class="t-role" x="398" y="593">target bearing and rate</text>
+          <text class="t-tog" x="398" y="611">always started</text>
+          <text class="t-ap" x="398" y="626">◂ /ap/v1 pose/filtered</text>
+        </g>
+
+        <g class="node" data-node="starter" aria-label="starter_node">
+          <rect class="card" x="704" y="150" width="176" height="108" rx="8"/>
+          <rect class="tab-r" x="714" y="139" width="130" height="22" rx="11"/>
+          <text class="tab-t" x="724" y="154">▶ /starter/takeoff</text>
+          <text class="t-name" x="718" y="182">starter</text>
+          <text class="t-exe" x="718" y="198">starter_node</text>
+          <text class="t-role" x="718" y="217">arm, take off, clean up</text>
+          <text class="t-tog" x="718" y="235">starter:=true</text>
+          <text class="t-ap" x="718" y="250">◂ /ap/v1 status, pose</text>
+        </g>
+
+        <g class="node" data-node="safety" aria-label="safety_node">
+          <rect class="card" x="704" y="338" width="176" height="108" rx="8"/>
+          <rect class="tab-r" x="714" y="327" width="124" height="22" rx="11"/>
+          <text class="tab-t" x="724" y="342">▶ /safety/brake …</text>
+          <text class="t-name" x="718" y="370">safety</text>
+          <text class="t-exe" x="718" y="386">safety_node</text>
+          <text class="t-role" x="718" y="405">BRAKE on any violation</text>
+          <text class="t-tog" x="718" y="423">safety:=true</text>
+          <text class="t-ap" x="718" y="438">◂ /ap/v1 status, pose</text>
+        </g>
+
+        <!-- ===== external + ArduPilot + simulator blocks ===== -->
+        <g class="node" data-node="openrouter" aria-label="OpenRouter API">
+          <rect class="card ext" x="64" y="24" width="176" height="52" rx="8"/>
+          <text class="t-name" x="78" y="46" style="font-size: 13.5px">OpenRouter API</text>
+          <text class="t-exe" x="78" y="64" style="font-size: 10px">external service</text>
+        </g>
+
+        <g class="node" data-node="ap" aria-label="micro_ros_agent, ArduPilot DDS interface">
+          <rect class="card ap" x="1050" y="150" width="190" height="296" rx="8"/>
+          <text class="t-name" x="1066" y="176" style="font-size: 14px">micro_ros_agent</text>
+          <text class="t-small" x="1066" y="192">ArduPilot DDS ⇄ ROS 2</text>
+          <text class="t-head" x="1066" y="222">/AP/V1/ PUBLISHES</text>
+          <text x="1066" y="238">status</text>
+          <text x="1066" y="254">pose/filtered</text>
+          <text class="t-head" x="1066" y="280">/AP/V1/ ACCEPTS</text>
+          <text x="1066" y="296">cmd_vel</text>
+          <text x="1066" y="312">mode_switch</text>
+          <text x="1066" y="328">prearm_check</text>
+          <text x="1066" y="344">arm_motors</text>
+          <text x="1066" y="360">experimental/takeoff</text>
+          <text x="1066" y="376">get/set_parameters</text>
+          <text class="t-out" x="1066" y="428">status ≈ every 0.75 s</text>
+        </g>
+
+        <g class="node" data-node="mavproxy" aria-label="MAVProxy">
+          <rect class="card ap" x="1050" y="526" width="135" height="80" rx="8"/>
+          <text class="t-name" x="1064" y="551" style="font-size: 14px">MAVProxy</text>
+          <text class="t-small" x="1064" y="567">MAVLink router</text>
+          <text class="t-out" x="1064" y="590">out :14550 :14551</text>
+        </g>
+
+        <g class="node" data-node="sitl" aria-label="ArduPilot SITL">
+          <rect class="card ap" x="1050" y="712" width="190" height="80" rx="8"/>
+          <text class="t-name" x="1066" y="737" style="font-size: 14px">ArduPilot SITL</text>
+          <text class="t-small" x="1066" y="754">Copter firmware on the PC</text>
+          <text class="t-out" x="1066" y="776">EKF · modes · DDS client</text>
+        </g>
+
+        <g class="node" data-node="gazebo" aria-label="Gazebo Harmonic">
+          <rect class="card sim" x="384" y="712" width="496" height="80" rx="8"/>
+          <text class="t-name" x="400" y="737" style="font-size: 14px">Gazebo Harmonic</text>
+          <text class="t-small" x="400" y="755" style="fill: var(--ink)">runway world · iris_with_gimbal + static camera 640×480 · sphere target, cars</text>
+          <text class="t-out" x="400" y="776">ardupilot_gazebo plugin (fork) · + robot_state_publisher, RViz, Gazebo GUI</text>
+        </g>
+
+        <g class="node" data-node="bridge" aria-label="ros_gz_bridge">
+          <rect class="card sim" x="64" y="712" width="176" height="80" rx="8"/>
+          <text class="t-name" x="78" y="737" style="font-size: 14px">ros_gz_bridge</text>
+          <text class="t-out" x="78" y="756" style="fill: var(--cam)">camera image ⇢ 3 nodes</text>
+          <text class="t-out" x="78" y="774">/clock ⇢ every node</text>
+        </g>
+      </svg>
