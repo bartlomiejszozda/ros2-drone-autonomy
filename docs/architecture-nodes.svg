@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" class="map" viewBox="0 0 1270 824" width="1270" height="824" role="img" aria-label="Collider node graph: camera images flow from the Gazebo bridge into tracker, car_detector and assistant; tracker feeds target_motion, which feeds steering; steering sends cmd_vel or RC override to ArduPilot; mission drives starter and steering; safety can brake the vehicle, disable steering and cancel takeoff.">
-<title>Collider ROS 2 node graph</title>
+<title>Collider architecture, view 1: ROS 2 node graph</title>
 <style>
 :root {
   --bg: #f4f5f2;

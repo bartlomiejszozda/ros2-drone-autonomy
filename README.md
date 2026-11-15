@@ -31,23 +31,29 @@ what the camera sees.
 
 ## Architecture
 
-![Collider ROS 2 node graph](docs/node-graph.svg)
+**[Open the interactive architecture page](https://bartlomiejszozda.github.io/ros2-drone-autonomy/architecture.html)**:
+both views below with link highlighting, launch arguments and ready-to-run commands.
+Design decisions are in [docs/architecture.md](docs/architecture.md), parameters and
+interfaces in [docs/nodes.md](docs/nodes.md).
+
+The same system is shown in two views.
+
+### View 1: node graph (who talks to whom)
+
+![Architecture, view 1: ROS 2 node graph](docs/architecture-nodes.svg)
 
 Nodes talk through topics for continuous data (images, observations) and actions for
 anything with a start, progress and an end (takeoff, mission, assistant questions).
 Only `steering`, `starter`, `safety` and `mission` send commands to ArduPilot.
 
-![Collider components in a seven-layer robotics stack](docs/architecture-layers.svg)
+### View 2: robotics layers (what each part is responsible for)
+
+![Architecture, view 2: components in a seven-layer robotics stack](docs/architecture-layers.svg)
 
 Collider covers perception, control, behavior and mission logic (layers 3, 4, 6 and 7).
 ArduPilot SITL provides state estimation, the inner control loops and flight modes, and
 Gazebo simulates the airframe, sensors and camera. Layer 5 is still empty: steering reacts
 to the current target bearing and does not plan a path.
-
-**[Interactive architecture page](https://bartlomiejszozda.github.io/ros2-drone-autonomy/architecture.html)**:
-both diagrams with link highlighting, launch arguments and ready-to-run commands.
-See [docs/architecture.md](docs/architecture.md) for design decisions
-and [docs/nodes.md](docs/nodes.md) for parameters and interfaces.
 
 ## Quick start
 

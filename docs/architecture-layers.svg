@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" class="map layers" viewBox="0 0 1300 812" width="1300" height="812" role="img" aria-label="Collider components placed in the seven robotics layers: mission in layers 7 and 6, starter and safety in layer 6, nothing in layer 5, perception nodes in layer 4, steering in layer 3, thin adapters in layer 2; ArduPilot SITL covers layers 1 to 3 plus modes and failsafes; Gazebo is the simulated hardware.">
-<title>Collider in the seven-layer robotics stack</title>
+<title>Collider architecture, view 2: seven-layer robotics stack</title>
 <style>
 :root {
   --bg: #f4f5f2;
