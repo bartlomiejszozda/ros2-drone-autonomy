@@ -9,7 +9,10 @@ towards it with visual servoing, while a safety supervisor watches the flight. A
 detector reports vehicles on the ground, and an LLM assistant answers questions about
 what the camera sees.
 
-<!-- demo: add docs/media/demo.gif (takeoff, target lock, pursuit) -->
+![Demo: takeoff, target lock and pursuit in simulation](docs/media/demo.gif)
+
+*Simulated flight: takeoff, then steering towards the target (black sphere). Left: tracker
+and car detector camera streams. Right: mission feedback, node logs and Gazebo.*
 
 ## Features
 
